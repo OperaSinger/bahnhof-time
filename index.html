@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+
+    <title>Bahnhof Time</title>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="jumbotron" color: "black">
+            <h1 class="text-center">Take the Train</h1>
+            <h3 class="text-center">Plan Your Next Trip</h3>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card card-primary" id="trains">
+                    <div class="card-heading">
+                        <h3 class="card-title" style="text-align: center">
+                            <strong>Bahnhof Time</strong>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover" id='train-schedule'>
+                            <thead>
+                                <tr>
+                                    <th>Train Name</th>
+                                    <th>Destination</th>
+                                    <th>Frequency</th>
+                                    <th>First Train (of the day)</th>
+                                    <th>Next Arrival</th>
+                                    <th>Minutes Away</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                <div class="col-lg-12">
+                  
+                        <div class="card-body-primary">
+                                <form id="enterForm">
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput">Train Name</label>
+                                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Train Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">Destination</label>
+                                            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Destination">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">Frequency</label>
+                                            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Frequency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">First Train</label>
+                                            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="First Train">
+                                        </div>
+                                        <button class="btn btn-secondary" id="add-employee-btn" type="submit">Submit</button>
+                                 </form>
+                        </div>
+                    </div>
+                </div>
+      </div>
+    </div>
+
+
+    <script>
+
+
+    </script>
+
+</body>
+
+</html>
