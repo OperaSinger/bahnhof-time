@@ -17,6 +17,10 @@ form {
     font-family: 'Quicksand', sans-serif;
 }
 
+#frequency {
+    width: 3em;
+  }
+
 .card-body {
     margin-bottom: 5px;
 }
@@ -43,3 +47,4 @@ form {
     background-size: cover;
     z-index: -99;
 }
+

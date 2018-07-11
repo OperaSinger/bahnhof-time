@@ -1,27 +1,27 @@
 $(document).ready(function () {
 
-// initialize Firebase database
+    // initialize Firebase database
 
     var config = {
-        apiKey: "AIzaSyA5eYKsB8T2q6rMGdKSvac6eQsWTzsZEjE",
-        authDomain: "fir-recent-user.firebaseapp.com",
-        databaseURL: "https://fir-recent-user.firebaseio.com",
-        storageBucket: "fir-recent-user.appspot.com"
+        apiKey: "AIzaSyD-sqqIXbEgXa07sEa-zKLrPzkrhLW73To",
+        authDomain: "my-first-project-4f270.firebaseapp.com",
+        databaseURL: "https://my-first-project-4f270.firebaseio.com",
+        projectId: "my-first-project-4f270",
+        storageBucket: "my-first-project-4f270.appspot.com",
+        messagingSenderId: "14142996073"
     };
 
     firebase.initializeApp(config);
 
     var database = firebase.database();
 
-    var trainName = "";
-    var destination = "";
-    var frequency = 0;
-    var firstTrain = "";
+    // Firebase watcher + initial loader ("value")
+    database.ref().on("value", function (snapshot) {
+        console.log(snapshot.val());
+    })
 
-    var nextTrain = 0;
-    var minToNext = 0;
 
-    //object list of Train arrays:
+    // //object list of Train arrays:
 
     var trainList = [
 
@@ -44,109 +44,89 @@ $(document).ready(function () {
             firstTrain: "6:23 AM"
         }
 
-    ]
+    ] 
 
-    // for each function to populate trains and info in DOM
+    // listener for entering new object for train list array:
 
-    trainList.forEach(function (element) {
-
-            $("#train-schedule").append(`<tr><td>${element.trainName}</td><td>${element.destination}</td><td>${element.frequency}</td><td>${element.firstTrain}</td><td>${nextTrain}</td><td>${minToNext}</td></tr>`);
-
-        console.log(element.trainName);
-        
-    });
-
-    $("#enter").on("click", function (event) {
+    $("#add-train-btn").on("click", function (event) {
         event.preventDefault();
-        var expressEnt = $("#expressEnt").val().trim();
-        expressions.push(expressEnt);
-        makeButtons();
-    });
+        var trainEnter = {
+            trainName: $("#trainName").val().trim(),
+            destination: $("#destination").val().trim(),
+            frequency: $("#frequency").val().trim(),
+            firstTrain: $("#firstTrain").val().trim()
 
-    // to append the HTML table (#train-schedule) with user inputs - and moment js math:
-    // }
+        };
 
-    // var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-    // console.log(firstTimeConverted);
+        console.log("#add-train-btn");
 
-    // // Current Time
-    // var currentTime = moment();
-    // console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+        trainList.push(trainEnter);
 
-    // // Difference between the times
-    // var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    // console.log("DIFFERENCE IN TIME: " + diffTime);
+        database.ref().push(trainEnter);
 
-    // // Time apart (remainder)
-    // var tRemainder = diffTime % tFrequency;
-    // console.log(tRemainder);
+        console.log(trainEnter)
+    })
 
-    // // Minute Until Train
-    // var tMinutesTillTrain = tFrequency - tRemainder;
-    // console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    // Firebase watcher + initial loader ("value")
+    database.ref().on("child_added", function (snapshot) {
 
-    // // Next Train
-    // var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+        // Log everything that's coming out of snapshot
+        console.log("Train Name is: " + snapshot.val().trainName);
+        console.log("Destination is: " + snapshot.val().destination);
+        console.log("Frequency in minutes is: " + snapshot.val().frequency);
+        console.log("First Train Arrives: " + snapshot.val().firstTrain);
 
-    // var datetime = null,
-    //     date = null;
+        // to append the HTML table (#train-schedule) with user inputs - and moment js math: // }
 
-    // var update = function () {
-    //     date = moment(new Date())
-    //     datetime.html(date.format('dddd, MMMM Do YYYY, h:mm:ss a'));
-    // };
+        var currentTime = moment();
 
-    // $(document).ready(function () {
-    //     datetime = $('#datetime')
-    //     update();
-    //     setInterval(update, 1000);
-    // });
+        var frequency = parseInt(snapshot.val().frequency);
+        console.log(frequency);
 
-    // {
+        console.log("Current time is: " + moment().format("HH:mm"));
+
+        var dateConverted = moment(snapshot.val().firstTrain, "HH:mm").subtract(1, "years");
+        console.log("Date converted is: " + dateConverted);
+
+        var trainTime = moment(dateConverted).format("HH:mm");
+        console.log("Train Time is: " + trainTime);
+    
+        // // Difference between the times
+        var timeConverted = moment(trainTime, "HH:mm").subtract(1, "years");
+        var diffTime = moment().diff(moment(timeConverted), "minutes");
+        console.log("DIFFERENCE IN TIME: " + diffTime);
+
+        // // Time apart (remainder)
+        var tRemainder = diffTime % frequency;
+        console.log("Time Remaining: " + tRemainder);
+
+        // // Minute Until Train
+        var tMinutesTillTrain = snapshot.val().frequency - tRemainder;
+        console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+        // // Next Train
+        var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+        console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+        $("#train-schedule").append(`<tr><td>${snapshot.val().trainName}</td><td>${snapshot.val().destination}</td><td>${snapshot.val().frequency}</td><td>${snapshot.val().firstTrain}</td><td>${trainTime}</td><td>${tRemainder}</td></tr>`);
 
 
-    //   // Capture Button Click
-    //   $("#add-user").on("click", function(event) {
-    //     // Don't refresh the page!
-    //     event.preventDefault();
+        // var datetime = null,
+        //     date = null;
 
-    //     // YOUR TASK!!!
-    //     // Code in the logic for storing and retrieving the most recent user.
-    //     // Don't forget to provide initial data to your Firebase database.
-    //     name = $("#name-input").val().trim();
-    //     email = $("#email-input").val().trim();
-    //     age = $("#age-input").val().trim();
-    //     comment = $("#comment-input").val().trim();
+        // var update = function () {
+        //     date = moment(new Date())
+        //     datetime.html(date.format('dddd, MMMM Do YYYY, h:mm:ss a'));
+        // };
 
-    //     database.ref().set({
-    //       name: name,
-    //       email: email,
-    //       age: age,
-    //       comment: comment
-    //     });
+        // $(document).ready(function () {
+        //     datetime = $('#datetime')
+        //     update();
+        //     setInterval(update, 1000);
+        // });
 
-    //   });
 
-    //   // Firebase watcher + initial loader HINT: .on("value")
-    //   database.ref().on("value", function(snapshot) {
 
-    //     // Log everything that's coming out of snapshot
-    //     console.log(snapshot.val());
-    //     console.log(snapshot.val().name);
-    //     console.log(snapshot.val().email);
-    //     console.log(snapshot.val().age);
-    //     console.log(snapshot.val().comment);
+    })
 
-    //     // Change the HTML to reflect
-    //     $("#name-display").text(snapshot.val().name);
-    //     $("#email-display").text(snapshot.val().email);
-    //     $("#age-display").text(snapshot.val().age);
-    //     $("#comment-display").text(snapshot.val().comment);
-
-    //     // Handle the errors
-    //   }, function(errorObject) {
-    //     console.log("Errors handled: " + errorObject.code);
-    //   }); */}
-
-})
+    })
